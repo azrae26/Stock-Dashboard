@@ -34,163 +34,8 @@
         </aside>
         
         <main class="content">
-            <!-- 市場總覽 -->
-            <section class="widget market-overview">
-                <h2>市場總覽</h2>
-                <div class="market-indices">
-                    <div class="index">
-                        <h3>台股大盤</h3>
-                        <div class="value">18,235.48</div>
-                        <div class="change up">+125.67 (+0.69%)</div>
-                    </div>
-                    <div class="index">
-                        <h3>道瓊工業</h3>
-                        <div class="value">38,762.63</div>
-                        <div class="change down">-58.97 (-0.15%)</div>
-                    </div>
-                    <div class="index">
-                        <h3>納斯達克</h3>
-                        <div class="value">16,302.98</div>
-                        <div class="change up">+153.10 (+0.95%)</div>
-                    </div>
-                </div>
-                <div class="market-chart">
-                    <canvas id="marketChart"></canvas>
-                </div>
-            </section>
-
-            <!-- 投資組合摘要 -->
-            <section class="widget portfolio-summary">
-                <h2>投資組合摘要</h2>
-                <div class="portfolio-stats">
-                    <div class="stat">
-                        <h3>總市值</h3>
-                        <div class="value">NT$ 1,254,780</div>
-                    </div>
-                    <div class="stat">
-                        <h3>今日變動</h3>
-                        <div class="value up">+NT$ 15,430 (+1.24%)</div>
-                    </div>
-                    <div class="stat">
-                        <h3>總收益</h3>
-                        <div class="value up">+NT$ 84,780 (+7.25%)</div>
-                    </div>
-                </div>
-                <table class="portfolio-table">
-                    <thead>
-                        <tr>
-                            <th>股票</th>
-                            <th>持股數</th>
-                            <th>均價</th>
-                            <th>現價</th>
-                            <th>漲跌</th>
-                            <th>市值</th>
-                            <th>損益</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2330 台積電</td>
-                            <td>100</td>
-                            <td>580.00</td>
-                            <td>625.00</td>
-                            <td class="up">+5.8%</td>
-                            <td>62,500</td>
-                            <td class="up">+4,500</td>
-                        </tr>
-                        <tr>
-                            <td>2412 中華電</td>
-                            <td>200</td>
-                            <td>125.50</td>
-                            <td>128.00</td>
-                            <td class="up">+3.8%</td>
-                            <td>25,600</td>
-                            <td class="up">+500</td>
-                        </tr>
-                        <tr>
-                            <td>2454 聯發科</td>
-                            <td>50</td>
-                            <td>1080.00</td>
-                            <td>1050.00</td>
-                            <td class="down">-5.2%</td>
-                            <td>52,500</td>
-                            <td class="down">-1,500</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-
             <!-- 文章區塊 -->
             <div class="articles-container">
-                <!-- 推薦公司的文章 -->
-                <!-- 隱藏原來的設計
-                <section class="widget recommended-articles">
-                    <h2>你可能有興趣</h2>
-                    <table class="earnings-table">
-                        <thead>
-                            <tr>
-                                <th>公司</th>
-                                <th>漲跌幅</th>
-                                <th>最新文章</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>6166 凌華</td>
-                                <td class="up">+2.4%</td>
-                                <td>最佳關注凌華(6166)的時機點是何時 ?此時正面臨什麼困境與機會。 <span class="hot-tag">熱門</span></td>
-                            </tr>
-                            <tr>
-                                <td>8114 振樺電</td>
-                                <td class="up">+3.8%</td>
-                                <td>全面啟動！振樺電(8114)如何用SDA模式，創造新高毛利率</td>
-                            </tr>
-                            <tr>
-                                <td>1560 中砂</td>
-                                <td class="up"><span class="limit-tag limit-up">+10.0%</span></td>
-                                <td>誰說砂輪業沒未來？中砂(1560)Q2營收挑戰歷史新高：靠半導體大單逆襲，營收要破表？ <span class="hot-tag">熱門</span></td>
-                            </tr>
-                            <tr>
-                                <td>5609 中菲行</td>
-                                <td class="up">+7.2%</td>
-                                <td>美中貿易烽火再起！中菲行(5609)轉單狂潮來襲，準備好迎接下個高峰了嗎？</td>
-                            </tr>
-                            <tr>
-                                <td>6292 迅德</td>
-                                <td class="down">-1.6%</td>
-                                <td>高階少量能撐業績？迅德(6292)利基市場緊抓不放能否擺脫成熟產業天花板？</td>
-                            </tr>
-                            <tr>
-                                <td>8936 國統</td>
-                                <td class="up">+4.3%</td>
-                                <td>國統(8936)訂單能見度與成長節奏：260億訂單如何推動營收高峰？ <span class="hot-tag">熱門</span></td>
-                            </tr>
-                            <tr>
-                                <td>2395 研華</td>
-                                <td class="down">-2.3%</td>
-                                <td>研華(2395)首季業務穩健增長，但關稅會衝擊長期獲利能力嗎?</td>
-                            </tr>
-                            <tr>
-                                <td>3305 昇貿</td>
-                                <td class="up">+5.1%</td>
-                                <td>昇貿(3305)1Q25 EPS 估創 9 季高點〉併購大瑞科發酵、急單續航，全年成長上修</td>
-                            </tr>
-                            <tr>
-                                <td>8083 瑞穎</td>
-                                <td class="up">+3.4%</td>
-                                <td>急單塞爆產線加班拚回成長動能，瑞穎(8083)受惠美中關稅轉單效應能持續多久？</td>
-                            </tr>
-                            <tr>
-                                <td>3023 信邦</td>
-                                <td class="up">+6.5%</td>
-                                <td>擴產佈局到位，信邦(3023)Q1獲利創新高，能否迎來下一波高峰？</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <a href="#" class="view-more">查看更多 <i class="fas fa-arrow-right"></i></a>
-                </section>
-                -->
-                
                 <!-- 新的卡片式設計 -->
                 <section class="widget recommended-articles card-style">
                     <h2>你可能有興趣</h2>
@@ -446,6 +291,31 @@
                 </section>
             </div>
 
+            <!-- 市場總覽 -->
+            <section class="widget market-overview">
+                <h2>市場總覽</h2>
+                <div class="market-indices">
+                    <div class="index">
+                        <h3>台股大盤</h3>
+                        <div class="value">18,235.48</div>
+                        <div class="change up">+125.67 (+0.69%)</div>
+                    </div>
+                    <div class="index">
+                        <h3>道瓊工業</h3>
+                        <div class="value">38,762.63</div>
+                        <div class="change down">-58.97 (-0.15%)</div>
+                    </div>
+                    <div class="index">
+                        <h3>納斯達克</h3>
+                        <div class="value">16,302.98</div>
+                        <div class="change up">+153.10 (+0.95%)</div>
+                    </div>
+                </div>
+                <div class="market-chart">
+                    <canvas id="marketChart"></canvas>
+                </div>
+            </section>
+
             <!-- 法說會資訊區塊 -->
             <div class="earnings-container">
                 <!-- 即將召開法說會 -->
@@ -626,240 +496,6 @@
                     <a href="#" class="view-more">查看更多 <i class="fas fa-arrow-right"></i></a>
                 </section>
             </div>
-
-            <!-- 個股分析 -->
-            <section class="widget stock-analysis">
-                <h2>個股詳細分析</h2>
-                <div class="stock-selector">
-                    <select id="stockSelect">
-                        <option value="2330">2330 台積電</option>
-                        <option value="2412">2412 中華電</option>
-                        <option value="2454">2454 聯發科</option>
-                    </select>
-                </div>
-                <div class="stock-info">
-                    <div class="stock-header">
-                        <h3>2330 台積電</h3>
-                        <div class="price">625.00</div>
-                        <div class="change up">+15.00 (+2.5%)</div>
-                    </div>
-                    <div class="price-chart">
-                        <canvas id="stockChart"></canvas>
-                    </div>
-                    <div class="chart-period">
-                        <button class="active">1日</button>
-                        <button>1週</button>
-                        <button>1月</button>
-                        <button>3月</button>
-                        <button>1年</button>
-                        <button>5年</button>
-                    </div>
-                </div>
-                <div class="stock-metrics">
-                    <div class="metric">
-                        <h4>成交量</h4>
-                        <div class="value">2,354萬</div>
-                    </div>
-                    <div class="metric">
-                        <h4>本益比</h4>
-                        <div class="value">18.6</div>
-                    </div>
-                    <div class="metric">
-                        <h4>殖利率</h4>
-                        <div class="value">1.8%</div>
-                    </div>
-                    <div class="metric">
-                        <h4>淨值比</h4>
-                        <div class="value">5.2</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 技術分析 -->
-            <section class="widget technical-analysis">
-                <h2>技術分析指標</h2>
-                <div class="indicators">
-                    <div class="indicator">
-                        <h3>移動平均線</h3>
-                        <div class="indicator-chart">
-                            <canvas id="maChart"></canvas>
-                        </div>
-                        <div class="indicator-values">
-                            <div class="indicator-value">
-                                <span>MA5:</span> 618.40 <span class="up">(+)</span>
-                            </div>
-                            <div class="indicator-value">
-                                <span>MA10:</span> 610.25 <span class="up">(+)</span>
-                            </div>
-                            <div class="indicator-value">
-                                <span>MA20:</span> 595.80 <span class="up">(+)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="indicator">
-                        <h3>相對強弱指標 (RSI)</h3>
-                        <div class="indicator-chart">
-                            <canvas id="rsiChart"></canvas>
-                        </div>
-                        <div class="indicator-values">
-                            <div class="indicator-value">
-                                <span>RSI6:</span> 68.5
-                            </div>
-                            <div class="indicator-value">
-                                <span>RSI14:</span> 62.3
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 財務指標 -->
-            <section class="widget financial-metrics">
-                <h2>財務指標儀表板</h2>
-                <div class="quarterly-data">
-                    <h3>季度財報</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>季度</th>
-                                <th>營收(億)</th>
-                                <th>毛利率</th>
-                                <th>營益率</th>
-                                <th>淨利(億)</th>
-                                <th>EPS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>2023 Q4</td>
-                                <td>6,258</td>
-                                <td>53.2%</td>
-                                <td>41.5%</td>
-                                <td>2,950</td>
-                                <td>11.35</td>
-                            </tr>
-                            <tr>
-                                <td>2023 Q3</td>
-                                <td>5,462</td>
-                                <td>51.8%</td>
-                                <td>39.8%</td>
-                                <td>2,362</td>
-                                <td>9.10</td>
-                            </tr>
-                            <tr>
-                                <td>2023 Q2</td>
-                                <td>5,303</td>
-                                <td>52.1%</td>
-                                <td>40.1%</td>
-                                <td>2,314</td>
-                                <td>8.92</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="financial-charts">
-                    <div class="chart">
-                        <h3>營收與淨利趨勢</h3>
-                        <canvas id="revenueChart"></canvas>
-                    </div>
-                    <div class="chart">
-                        <h3>利潤率趨勢</h3>
-                        <canvas id="marginChart"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 產業比較 -->
-            <section class="widget industry-comparison">
-                <h2>產業比較分析</h2>
-                <div class="industry-stats">
-                    <div class="industry-chart">
-                        <h3>半導體產業市值比較</h3>
-                        <canvas id="industryChart"></canvas>
-                    </div>
-                    <div class="company-comparison">
-                        <h3>關鍵指標比較</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>公司</th>
-                                    <th>現價</th>
-                                    <th>市值(億)</th>
-                                    <th>本益比</th>
-                                    <th>毛利率</th>
-                                    <th>ROE</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>台積電</td>
-                                    <td>625.00</td>
-                                    <td>16,211</td>
-                                    <td>18.6</td>
-                                    <td>53.2%</td>
-                                    <td>28.3%</td>
-                                </tr>
-                                <tr>
-                                    <td>聯發科</td>
-                                    <td>1050.00</td>
-                                    <td>8,653</td>
-                                    <td>22.4</td>
-                                    <td>48.5%</td>
-                                    <td>21.7%</td>
-                                </tr>
-                                <tr>
-                                    <td>聯電</td>
-                                    <td>52.80</td>
-                                    <td>6,495</td>
-                                    <td>15.2</td>
-                                    <td>38.6%</td>
-                                    <td>16.5%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 投資日曆 -->
-            <section class="widget investment-calendar">
-                <h2>投資日曆</h2>
-                <div class="calendar-controls">
-                    <button><i class="fas fa-chevron-left"></i></button>
-                    <h3>2023年6月</h3>
-                    <button><i class="fas fa-chevron-right"></i></button>
-                </div>
-                <div class="events-list">
-                    <div class="event">
-                        <div class="event-date">6月10日</div>
-                        <div class="event-info">
-                            <div class="event-type dividend">除息日</div>
-                            <div class="event-title">台積電 (2330) - 現金股利 3.50元</div>
-                        </div>
-                    </div>
-                    <div class="event">
-                        <div class="event-date">6月12日</div>
-                        <div class="event-info">
-                            <div class="event-type financial">財報公布</div>
-                            <div class="event-title">鴻海 (2317) - 5月營收公布</div>
-                        </div>
-                    </div>
-                    <div class="event">
-                        <div class="event-date">6月15日</div>
-                        <div class="event-info">
-                            <div class="event-type meeting">股東會</div>
-                            <div class="event-title">中華電 (2412) - 年度股東常會</div>
-                        </div>
-                    </div>
-                    <div class="event">
-                        <div class="event-date">6月20日</div>
-                        <div class="event-info">
-                            <div class="event-type financial">法說會</div>
-                            <div class="event-title">聯發科 (2454) - Q2展望法說會</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </main>
     </div>
 
