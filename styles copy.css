@@ -694,7 +694,7 @@ header {
     color: var(--text-color);
 }
 
-/* 表格樣式 */
+/* 法說會表格樣式 */
 .earnings-table {
     width: 100%;
     border-collapse: collapse;
@@ -711,20 +711,6 @@ header {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-.earnings-table td {
-    padding: 10px;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-color);
-    font-size: 14px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.earnings-table tr:hover {
-    background-color: rgba(251, 140, 0, 0.05);
-}
-
-/* 法說會表格樣式 */
 .earnings-table th:first-child {
     width: 120px;
 }
@@ -742,6 +728,19 @@ header {
 .upcoming-earnings .earnings-table th:last-child,
 .recent-earnings .earnings-table th:last-child {
     width: 85px;
+}
+
+.earnings-table td {
+    padding: 10px;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.earnings-table tr:hover {
+    background-color: rgba(251, 140, 0, 0.05);
 }
 
 /* 公司名稱欄位樣式 */
@@ -763,55 +762,40 @@ header {
     vertical-align: middle;
 }
 
-/* 推薦文章和關注公司表格的特殊樣式 */
-.recommended-articles .earnings-table th:nth-child(1),
-.watched-articles .earnings-table th:nth-child(1) {
-    width: auto;
-    text-align: left;
-}
-
-.recommended-articles .earnings-table th:nth-child(2),
-.watched-articles .earnings-table th:nth-child(2) {
-    width: 110px !important;
-    min-width: 110px !important;
-    text-align: left;
-}
-
-.recommended-articles .earnings-table th:nth-child(3),
-.watched-articles .earnings-table th:nth-child(3) {
-    width: 80px;
+/* 法說日期欄位樣式 */
+.upcoming-earnings .earnings-table td:nth-child(3),
+.recent-earnings .earnings-table td:nth-child(3) {
+    white-space: nowrap;
+    width: 85px;
     text-align: center;
 }
 
-.recommended-articles .earnings-table td:nth-child(1),
-.watched-articles .earnings-table td:nth-child(1) {
-    text-align: left;
+/* 文章日期欄位樣式 */
+.upcoming-earnings .earnings-table td:nth-child(5),
+.recent-earnings .earnings-table td:nth-child(5) {
+    white-space: nowrap;
+    width: 85px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+/* 文章標題欄位樣式 - 法說會區塊 */
+.upcoming-earnings .earnings-table td:nth-child(4),
+.recent-earnings .earnings-table td:nth-child(4) {
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
     line-height: 1.4;
-    width: auto;
-    font-weight: normal;
-    color: var(--text-color);
 }
 
-.recommended-articles .earnings-table td:nth-child(2),
-.watched-articles .earnings-table td:nth-child(2) {
-    width: 110px !important;
-    min-width: 110px !important;
-    text-align: left;
-    white-space: nowrap;
-    font-weight: normal;
-    color: var(--text-color);
-}
-
-.recommended-articles .earnings-table td:nth-child(3),
-.watched-articles .earnings-table td:nth-child(3) {
-    width: 80px;
-    text-align: center;
-    white-space: nowrap;
-    padding: 5px 6px;
-    vertical-align: middle;
+/* 文章標題欄位樣式 - 我看過的公司和你可能有興趣區塊 */
+.watched-articles .earnings-table td:nth-child(3),
+.recommended-articles .earnings-table td:nth-child(3) {
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
 }
 
 /* 頁尾樣式 */
