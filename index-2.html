@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台光電 2383 - 優分析產業資料庫</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* 頁面特定樣式 */
+        .stock-header-section {
+            background-color: var(--bg-card);
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        
+        .stock-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 8px;
+        }
+        
+        .stock-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        
+        .stock-code {
+            font-size: 24px;
+            color: var(--text-secondary);
+        }
+        
+        .stock-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff3333;
+        }
+        
+        .stock-change {
+            font-size: 24px;
+            color: #ff3333;
+        }
+        
+        .compact-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .compact-row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .compact-widget {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            height: 280px;
+            overflow: hidden;
+        }
+        
+        .compact-widget h3 {
+            color: var(--text-color);
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+        
+        .growth-badge {
+            background: none;
+            color: var(--primary-color);
+            padding: 0;
+            border-radius: 0;
+            font-size: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .eps-data {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .eps-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .eps-year {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .eps-value {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .key-narrative {
+            line-height: 1.6;
+            color: var(--text-color);
+            font-size: 15px;
+            text-align: justify;
+            font-weight: 300;
+        }
+        
+        .chart-container {
+            height: 220px;
+            position: relative;
+        }
+        
+        .chart-canvas {
+            height: 100%;
+            width: 100%;
+        }
+        
+        .content-compact {
+            padding: 20px;
+            max-width: none;
+        }
+        
+        /* 覆蓋響應式設計，確保左欄在所有尺寸下都正常顯示 */
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 240px !important;
+                transition: none !important;
+            }
+            
+            .sidebar nav ul li a span {
+                display: inline !important;
+            }
+            
+            .sidebar nav ul li a {
+                padding: 12px 20px !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: row !important;
+            }
+            
+            .sidebar {
+                width: 240px !important;
+                height: calc(100vh - 60px) !important;
+                position: sticky !important;
+                top: 60px !important;
+            }
+            
+            .sidebar nav ul {
+                display: block !important;
+                flex-direction: column !important;
+                overflow-x: visible !important;
+            }
+            
+            .sidebar nav ul li {
+                margin-bottom: 5px !important;
+            }
+            
+            .sidebar nav ul li a {
+                padding: 12px 20px !important;
+                display: flex !important;
+                align-items: center !important;
+                gap: 10px !important;
+            }
+            
+            .sidebar nav ul li a span {
+                display: inline !important;
+            }
+        }
+        
+        /* 強制覆蓋所有可能的響應式規則 */
+        @media (min-width: 1px) {
+            .sidebar {
+                width: 240px !important;
+                min-width: 240px !important;
+            }
+            
+            .sidebar nav ul li a {
+                white-space: nowrap !important;
+            }
+            
+            .sidebar nav ul li a i {
+                min-width: 16px !important;
+            }
+        }
+        
+        .key-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            height: calc(100% - 45px);
+        }
+        
+        .metric-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            height: 100%;
+            min-height: 0;
+            text-align: center;
+        }
+        
+        .metric-item:hover {
+            background-color: rgba(251, 140, 0, 0.1);
+            border-color: var(--primary-color);
+        }
+        
+        .metric-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .metric-value {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 24px;
+        }
+        
+        .stock-type {
+            border-color: var(--primary-color);
+            background-color: rgba(251, 140, 0, 0.1);
+        }
+        
+        .growth-type {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">優分析產業資料庫</div>
+        <div class="search-bar">
+            <input type="text" placeholder="搜尋股票...">
+            <button><i class="fas fa-search"></i></button>
+        </div>
+        <div class="user-menu">
+            <button><i class="fas fa-user"></i> 用戶設定</button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li class="active"><a href="index.html"><i class="fas fa-home"></i> 儀表板</a></li>
+                    <li><a href="#"><i class="fas fa-chart-line"></i> 市場分析</a></li>
+                    <li><a href="#"><i class="fas fa-briefcase"></i> 投資組合</a></li>
+                    <li><a href="#"><i class="fas fa-bell"></i> 提醒設定</a></li>
+                    <li><a href="#"><i class="fas fa-cog"></i> 設定</a></li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <main class="content-compact">
+            <!-- 股票標題區塊 -->
+            <section class="stock-header-section">
+                <div class="stock-title">
+                    <span class="stock-name">台光電</span>
+                    <span class="stock-code">2383</span>
+                    <span class="stock-price">706</span>
+                    <span class="stock-change">-0.14%</span>
+                </div>
+            </section>
+
+            <!-- 第一排：關鍵敍述、成長股資訊、K線圖 -->
+            <div class="compact-row">
+                <div class="compact-widget">
+                    <h3>關鍵敍述</h3>
+                    <div class="key-narrative">
+                        台光電最有看頭的是其在高階CCL市場的領先地位，尤其在AI伺服器與800G交換器需求強勁推動下，產能持續擴充，2025年產能將增加20%以上，毛利率穩定提升。法人看好其技術優勢、市占率持續擴大，並受惠AI運算及邊緣運算需求長期成長，未來營收與獲利成長動能強勁。
+                    </div>
+                </div>
+                
+                <div class="compact-widget">
+                    <h3>重點指標</h3>
+                    <div class="key-metrics">
+                        <div class="metric-item stock-type">
+                            <div class="metric-label">股票類型</div>
+                            <div class="metric-value growth-type">成長股</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">2025法人估EPS</div>
+                            <div class="metric-value">41.54 元</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">2026法人估EPS</div>
+                            <div class="metric-value">47.63 元</div>
+                        </div>
+                        <div class="metric-item">
+                            <div class="metric-label">2027法人估EPS</div>
+                            <div class="metric-value">55.60 元</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="compact-widget">
+                    <h3>K線圖</h3>
+                    <div class="chart-container">
+                        <canvas id="klineChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第二排：法人預估EPS、月營收趨勢、資本支出 -->
+            <div class="compact-row-3">
+                <div class="compact-widget">
+                    <h3>法人預估EPS</h3>
+                    <div class="chart-container">
+                        <canvas id="epsChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <div class="compact-widget">
+                    <h3>月營收趨勢</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <div class="compact-widget">
+                    <h3>資本支出</h3>
+                    <div class="chart-container">
+                        <canvas id="capexChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第三排：存貨、合約負債、EPS上下修趨勢 -->
+            <div class="compact-row-3">
+                <div class="compact-widget">
+                    <h3>存貨</h3>
+                    <div class="chart-container">
+                        <canvas id="inventoryChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <div class="compact-widget">
+                    <h3>合約負債</h3>
+                    <div class="chart-container">
+                        <canvas id="contractLiabilityChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+                
+                <div class="compact-widget">
+                    <h3>EPS上下修趨勢</h3>
+                    <div class="chart-container">
+                        <canvas id="epsRevisionChart" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2023 優分析產業資料庫 | 免責聲明：本站提供的資訊僅供參考，不構成投資建議</p>
+        </div>
+    </footer>
+
+    <script>
+        // K線圖
+        const klineCtx = document.getElementById('klineChart').getContext('2d');
+        new Chart(klineCtx, {
+            type: 'line',
+            data: {
+                labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                datasets: [{
+                    label: '股價',
+                    data: [580, 620, 680, 650, 690, 720, 706, 715, 700, 685, 695, 706],
+                    borderColor: '#fb8c00',
+                    backgroundColor: 'rgba(251, 140, 0, 0.1)',
+                    tension: 0.1,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' 億元';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 9 },
+                            maxTicksLimit: 12,
+                            callback: function(value, index) {
+                                const label = this.getLabelForValue(value);
+                                return index % 4 === 0 ? label : '';
+                            }
+                        }
+                    },
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return value + '億';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // 法人預估EPS圖表
+        const epsCtx = document.getElementById('epsChart').getContext('2d');
+        new Chart(epsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2023', '2024', '2025E', '2026E', '2027E'],
+                datasets: [{
+                    label: 'EPS',
+                    data: [16.35, 27.81, 41.54, 47.63, 55.60],
+                    backgroundColor: '#fb8c00',
+                    borderColor: '#fb8c00',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' 元';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 9 },
+                            maxTicksLimit: 12,
+                            callback: function(value, index) {
+                                const label = this.getLabelForValue(value);
+                                return index % 4 === 0 ? label : '';
+                            }
+                        }
+                    },
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return value + '元';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // 月營收圖表
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['22/01', '22/02', '22/03', '22/04', '22/05', '22/06', '22/07', '22/08', '22/09', '22/10', '22/11', '22/12',
+                         '23/01', '23/02', '23/03', '23/04', '23/05', '23/06', '23/07', '23/08', '23/09', '23/10', '23/11', '23/12',
+                         '24/01', '24/02', '24/03', '24/04', '24/05', '24/06', '24/07', '24/08', '24/09', '24/10', '24/11', '24/12',
+                         '25/01', '25/02', '25/03', '25/04'],
+                datasets: [{
+                    label: '月營收 (億)',
+                    data: [35.58, 29.18, 34.43, 30.72, 34.85, 34.27, 32.95, 32.33, 33.54, 31.44, 30.27, 27.16,
+                           21.97, 23.65, 27.97, 28.04, 31.51, 32.26, 36.46, 38.91, 43.37, 43.49, 42.25, 43.08,
+                           44.85, 37.64, 46.54, 50.60, 51.42, 52.46, 57.82, 57.41, 59.41, 58.18, 63.36, 64.10,
+                           69.86, 70.30, 76.68, 71.91],
+                    borderColor: '#fb8c00',
+                    backgroundColor: 'rgba(251, 140, 0, 0.1)',
+                    tension: 0.1,
+                    borderWidth: 2,
+                    pointRadius: 1.5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' 億元';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 9 },
+                            maxTicksLimit: 12,
+                            callback: function(value, index) {
+                                const label = this.getLabelForValue(value);
+                                return index % 4 === 0 ? label : '';
+                            }
+                        }
+                    },
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return value + '億';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // 資本支出圖表
+        const capexCtx = document.getElementById('capexChart').getContext('2d');
+        new Chart(capexCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2021', '2022', '2023', '2024', '2025E'],
+                datasets: [{
+                    label: '資本支出 (億)',
+                    data: [45.2, 68.7, 85.4, 112.1, 130.0],
+                    backgroundColor: '#fb8c00',
+                    borderColor: '#fb8c00',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' 億元';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 9 },
+                            maxTicksLimit: 12,
+                            callback: function(value, index) {
+                                const label = this.getLabelForValue(value);
+                                return index % 4 === 0 ? label : '';
+                            }
+                        }
+                    },
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return value + '億';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // 存貨圖表
+        const inventoryCtx = document.getElementById('inventoryChart').getContext('2d');
+        new Chart(inventoryCtx, {
+            type: 'line',
+            data: {
+                labels: ['Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024', 'Q3 2024', 'Q4 2024', 'Q1 2025'],
+                datasets: [{
+                    label: '存貨 (億)',
+                    data: [68.5, 71.2, 74.8, 83.4, 89.1, 92.9, 94.7, 94.8, 105.58],
+                    borderColor: '#fb8c00',
+                    backgroundColor: 'rgba(251, 140, 0, 0.1)',
+                    tension: 0.1,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' 億元';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 9 },
+                            maxTicksLimit: 12,
+                            callback: function(value, index) {
+                                const label = this.getLabelForValue(value);
+                                return index % 4 === 0 ? label : '';
+                            }
+                        }
+                    },
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return value + '億';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // 合約負債圖表
+        const contractLiabilityCtx = document.getElementById('contractLiabilityChart').getContext('2d');
+        new Chart(contractLiabilityCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Q1 2023', 'Q2 2023', 'Q3 2023', 'Q4 2023', 'Q1 2024', 'Q2 2024', 'Q3 2024'],
+                datasets: [{
+                    label: '合約負債 (億)',
+                    data: [8.3, 9.7, 11.2, 13.8, 15.4, 17.2, 19.1],
+                    backgroundColor: '#fb8c00',
+                    borderColor: '#fb8c00',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' 億元';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 9 },
+                            maxTicksLimit: 12,
+                            callback: function(value, index) {
+                                const label = this.getLabelForValue(value);
+                                return index % 4 === 0 ? label : '';
+                            }
+                        }
+                    },
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return value + '億';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+
+        // EPS上下修趨勢圖表
+        const epsRevisionCtx = document.getElementById('epsRevisionChart').getContext('2d');
+        new Chart(epsRevisionCtx, {
+            type: 'line',
+            data: {
+                labels: ['2025E', '2026E', '2027E'],
+                datasets: [{
+                    label: '上修次數',
+                    data: [8, 12, 15],
+                    borderColor: '#4caf50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                    tension: 0.1,
+                    borderWidth: 2
+                }, {
+                    label: '下修次數',
+                    data: [2, 1, 0],
+                    borderColor: '#f44336',
+                    backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                    tension: 0.1,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + ' 次';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 9 },
+                            maxTicksLimit: 12,
+                            callback: function(value, index) {
+                                const label = this.getLabelForValue(value);
+                                return index % 4 === 0 ? label : '';
+                            }
+                        }
+                    },
+                    y: { 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { 
+                            color: '#e0e0e0', 
+                            font: { size: 10 },
+                            callback: function(value) {
+                                return value + '次';
+                            }
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
